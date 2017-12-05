@@ -1,0 +1,6 @@
+DEFAULT bootfromdisk
+
+LABEL bootfromdisk
+    SAY Booting from local disk...
+    COM32 chain.c32
+    APPEND hd0

@@ -1,0 +1,9 @@
+server {
+    listen {{ http_port }};
+    root {{ http_root }};
+    server_name {{ server_name }};
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}

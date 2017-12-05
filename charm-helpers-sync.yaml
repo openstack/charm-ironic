@@ -1,0 +1,14 @@
+destination: hooks/charmhelpers
+branch: lp:charm-helpers
+include:
+  - core
+  - fetch
+  - contrib.storage
+  - contrib.hahelpers:
+    - apache
+    - cluster
+  - contrib.network
+  - contrib.python.packages
+  - contrib.openstack
+  - contrib.openstack.templates|inc=*
+  - contrib.charmsupport

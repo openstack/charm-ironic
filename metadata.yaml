@@ -1,0 +1,26 @@
+name: ironic
+summary: Ironic is an OpenStack project which provisions physical hardware.
+maintainer: ibalutoiu <ibalutoiu@cloudbasesolutions.com>
+description: |
+  OpenStack bare metal provisioning (or Ironic) is an integrated OpenStack
+  service which aims to provision bare metal machines instead of virtual
+  machines.
+tags:
+  - openstack
+subordinate: false
+provides:
+  ironic-api:
+    interface: ironic-api
+requires:
+  shared-db:
+    interface: mysql-shared
+  amqp:
+    interface: rabbitmq
+  image-service:
+    interface: glance
+  identity-service:
+    interface: keystone
+  neutron-api:
+    interface: neutron-api
+  object-store:
+    interface: swift-proxy

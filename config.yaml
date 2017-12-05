@@ -1,0 +1,183 @@
+options:
+  debug:
+    default: False
+    type: boolean
+    description: Enable debug logging.
+  verbose:
+    default: False
+    type: boolean
+    description: Enable verbose logging.
+  enabled-drivers:
+    default: "pxe_ipmitool,agent_ipmitool"
+    type: string
+    description: |
+      Specify the a comma separated list of drivers to load during service
+      initialization.
+  enable-ipxe:
+    default: False
+    type: boolean
+    description: Enable iPXE.
+  enable-uefi:
+    default: False
+    type: boolean
+    description: Enable UEFI boot mode.
+  ipxe-boot-script:
+    type: string
+    description: Path to the main iPXE script file.
+  pxe-config-template:
+    type: string
+    description: Template file for PXE configuration.
+  pxe-bootfile-name:
+    type: string
+    description: Bootfile DHCP parameter.
+  uefi-pxe-bootfile-name:
+    type: string
+    description: Bootfile DHCP parameter for UEFI boot mode.
+  uefi-pxe-config-template:
+    type: string
+    description: Template file for PXE configuration for UEFI boot loader.
+  http-port:
+    default: 8080
+    type: int
+    description: Port of the nginx webserver used by the iPXE.
+  tftp-port:
+    default: 69
+    type: int
+    description: TFTP port.
+  nodes-cleaning:
+    default: False
+    type: boolean
+    description: |
+      Enables the nodes cleaning tasks which are executed after the nodes are
+      deleted. NOTE: The cleaning operation causes instance deletion to take
+      significantly longer.
+  dhcp-provider:
+    type: string
+    default: neutron
+    description: |
+      DHCP provider used by Ironic. Valid options are: 'neutron' and 'none'.
+  disk-devices:
+    type: string
+    default: "cciss/c0d0,sda,hda,vda"
+    description: |
+      The disk devices to scan while doing the deploy. A comma separated list
+      should be given.
+  deploy-network-uuid:
+    type: string
+    description: |
+      Deployment network UUID.
+  cleaning-network-uuid:
+    type: string
+    description: |
+      Cleaning network UUID.
+  openstack-origin:
+    default: distro
+    type: string
+    description: |
+      Repository from which to install.  May be one of the following:
+      distro (default), ppa:somecustom/ppa, a deb url sources entry,
+      or a supported Cloud Archive release pocket.
+
+      Supported Cloud Archive sources include:
+
+      cloud:<series>-<openstack-release>
+      cloud:<series>-<openstack-release>/updates
+      cloud:<series>-<openstack-release>/staging
+      cloud:<series>-<openstack-release>/proposed
+
+      For series=Precise we support cloud archives for openstack-release:
+         * icehouse
+
+      For series=Trusty we support cloud archives for openstack-release:
+         * juno
+         * kilo
+         * ...
+
+      For series=Xenial we support cloud archives for openstack-release:
+         * newton
+
+      NOTE: updating this setting to a source that is known to provide
+      a later version of OpenStack will trigger a software upgrade.
+
+      NOTE: when openstack-origin-git is specified, openstack specific
+      packages will be installed from source rather than from the
+      openstack-origin repository.
+  rabbit-user:
+    default: ironic
+    type: string
+    description: Username used to access rabbitmq queue
+  rabbit-vhost:
+    default: openstack
+    type: string
+    description: Rabbitmq vhost
+  database-user:
+    default: ironic
+    type: string
+    description: Username for database access
+  database:
+    default: ironic
+    type: string
+    description: Database name
+  region:
+    default: RegionOne
+    type: string
+    description: OpenStack Region
+  # Network config (by default all access is over 'private-address')
+  os-admin-network:
+    type: string
+    default:
+    description: |
+      The IP address and netmask of the OpenStack Admin network (e.g.
+      192.168.0.0/24).
+      This network will be used for admin endpoints.
+  os-internal-network:
+    type: string
+    default:
+    description: |
+      The IP address and netmask of the OpenStack Internal network (e.g.
+      192.168.0.0/24).
+      This network will be used for internal endpoints.
+  os-public-network:
+    type: string
+    default:
+    description: |
+      The IP address and netmask of the OpenStack Public network (e.g.
+      192.168.0.0/24).
+      This network will be used for public endpoints.
+  os-deploy-network:
+    type: string
+    default:
+    description: |
+      The IP address and netmask of the OpenStack Deployment network (e.g.
+      192.168.0.0/24).
+      This network will be used for deployment network configuration.
+  swift-temp-url-duration:
+    type: int
+    default: 1200
+    description: |
+      The length of time in seconds that the Swift temporary URL will be
+      valid for. Defaults to 20 minutes. If some deploys get a 401
+      response code when trying to download from the temporary
+      URL, try raising this duration.
+  swift-url:
+    type: string
+    description: |
+      Base URL used for temporary URLs generated for Ironic Python Agent.
+      If this one is not set, a default base URL is constructed from the
+      private-address and the port of the swift-proxy charm.
+      This doesn't need to be set, if Ironic baremetal nodes can reach
+      the swift-proxy charm through the private-address.
+  swift-account:
+    type: string
+    description: |
+      Swift account name. Defaults to using Ironic's configured admin_tenant_id.
+  swift-container:
+    type: string
+    description: |
+      Swift container UUID for temporary URLs. Defaults to using glance's configured
+      container uuid.
+  swift-temp-url-key:
+    type: string
+    description: |
+      Swift temp URL secret key. Used to sign temporary URLs. Defaults to finding out
+      swift's configured secret key.
