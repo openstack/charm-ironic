@@ -1,12 +1,7 @@
 ## Overview
 
 This charm deploys and configures a node with OpenStack Ironic which has 
-integration with other OpenStack components. Services from the node are: 
-`ironic-api`, `ironic-conductor`, `tftpd-hpa` and optionally `nginx`.
-
-Nginx is optionally used as a light-weight web server used to serve
-iPXE files over http, in case the charm is configured to use iPXE instead of
-traditional PXE.
+integration with other OpenStack components.
 
 ## Configuration
 
@@ -14,14 +9,37 @@ Create an `options.yaml` file with the necessary configurations needed to deploy
 the charm:
 
     ironic:
-      openstack-origin: "cloud:xenial-newton"
-      enable-ipxe: True
-      enabled-drivers: "pxe_ipmitool,agent_ipmitool"
-      nodes-cleaning: False
+      series: xenial
+      constraints: spaces=internal,public,baremetaldeploy,ipmimanagement
+      num_units: 0
+      annotations:
+        "gui-x": "1353"
+        "gui-y": "1078"
+      options:
+        openstack-origin: "cloud:xenial-newton"
+        region: "RegionOne"
+        enable-ipxe: False
+        enabled-drivers: "pxe_ipmitool,agent_ipmitool"
+        nodes-cleaning: False
+        dhcp-provider: neutron
+        debug: True
+        verbose: True
+        swift-url: "http://10.20.0.2:8787/"
+        swift-account: "baremetal"
+        swift-container: "images"
+        swift-temp-url-duration: 1200
+        swift-temp-url-key: "key"
+        os-admin-network: "10.0.0.0/24"
+        os-internal-network: "10.0.1.0/24"
+        os-public-network: "10.0.2.0/24"
+        os-deploy-network: "10.0.3.0/24"
+        deploy-network-uuid: "7c3ee6a9-4f91-43d5-bb1c-44aea99abcf0"
+        cleaning-network-uuid: "7c3ee6a9-4f91-43d5-bb1c-44aea99abcf0"
+
 
 The above configurations can be used to deploy the charm using
-the OpenStack Newton release. You may change the config options according to your
-needs. See the configuration section for details about the charm's config
+the OpenStack Newton release. Make sure you change the config options according
+to your needs. See the configuration section for details about the charm's config
 options.
 
 ## Networking
@@ -29,27 +47,18 @@ options.
 OpenStack Ironic supports integration with Neutron, which is used as a DHCP
 provider for the `ironic-conductor.`
 
-As a requirement, prior to deploying the charm, you'll have to configure the
-`neutron-gateway` node with a flat network provider that uses a NIC which is
-connected to an isolated network dedicated for Ironic traffic.
-
-When iPXE is enabled, DHCP requests from iPXE need to have a DHCP tag called
-"ipxe", in order for the DHCP server to tell the client to get the "boot.ipxe"
-script via HTTP. Thus, you must configure `neutron-gateway` units accordingly:
-
-    juju set neutron-gateway dnsmasq-flags="dhcp-userclass=set:ipxe,iPXE, dhcp-match=set:ipxe,175"
-
 ## Usage
 
 Deploy the charm and add the relations with the other OpenStack charms:
 
-    juju deploy --config options.yaml cs:~cloudbaseit/xenial/ironic
+    juju deploy --config options.yaml ironic
+
     juju add-relation ironic mysql
     juju add-relation ironic keystone
     juju add-relation ironic rabbitmq-server
     juju add-relation ironic glance
     juju add-relation ironic neutron-api
-    juju add-relation ironic nova-compute-ironic
+    juju add-relation ironic swift-proxy
 
 To scale out horizontally:
 
