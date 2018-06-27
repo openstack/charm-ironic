@@ -10,11 +10,9 @@ from charmhelpers.core.hookenv import (
     relation_get,
     relation_ids,
     related_units,
-    unit_get,
     log,
     INFO,
 )
-from netaddr import IPNetwork, IPAddress
 import constants
 import os
 import netifaces
@@ -51,11 +49,14 @@ class GlanceSwiftBackendContext(context.OSContextGenerator):
             for unit in related_units(rid):
                 ctxt = {
                     'glance_swift_account':
-                        config('swift-account') or 'AUTH_%s' % identity_ctxt['admin_tenant_id'],
+                        config('swift-account') or
+                        'AUTH_%s' % identity_ctxt['admin_tenant_id'],
                     'glance_swift_container':
-                        config('swift-container') or relation_get('swift-container', rid=rid, unit=unit),
+                        config('swift-container') or
+                        relation_get('swift-container', rid=rid, unit=unit),
                     'glance_swift_temp_url_key':
-                        config('swift-temp-url-key') or relation_get('swift-temp-url-key', rid=rid, unit=unit),
+                        config('swift-temp-url-key') or
+                        relation_get('swift-temp-url-key', rid=rid, unit=unit),
                     'glance_swift_temp_url_duration':
                         config('swift-temp-url-duration')
                 }
@@ -99,9 +100,10 @@ class NeutronContext(context.OSContextGenerator):
 class IronicContext(context.OSContextGenerator):
 
     def __call__(self):
-        uefi_pxe_bootfile_name = config('uefi-pxe-bootfile-name') or \
-                                 'bootx64.efi'
-        uefi_pxe_config_template = config('uefi-pxe-config-template') or \
+        uefi_pxe_bootfile_name = \
+            config('uefi-pxe-bootfile-name') or 'bootx64.efi'
+        uefi_pxe_config_template = \
+            config('uefi-pxe-config-template') or \
             '$pybasedir/drivers/modules/pxe_grub_config.template'
 
         pxe_bootfile_name = config('pxe-bootfile-name')
@@ -141,7 +143,9 @@ class IronicContext(context.OSContextGenerator):
             'ipxe_boot_script': ipxe_boot_script,
             'uefi_pxe_bootfile_name': uefi_pxe_bootfile_name,
             'uefi_pxe_config_template': uefi_pxe_config_template,
-            'ipa_api_url': "http://{}:{}".format(resolve_address(DEPLOY), constants.API_PORTS['ironic-api'])
+            'ipa_api_url': "http://{}:{}".format(resolve_address(DEPLOY),
+                                                 constants.API_PORTS[
+                                                     'ironic-api'])
         }
 
         return ctxt

@@ -48,12 +48,11 @@ def resource_map():
                              database=config('database'),
                              ssl_dir=constants.IRONIC_CONF_DIR),
                          context.ImageServiceContext(),
-                         context.IdentityServiceContext(
-                            service='ironic',
-                            service_user='ironic'),
+                         context.IdentityServiceContext(service='ironic',
+                                                        service_user='ironic'),
                          NeutronContext(),
                          context.AMQPContext(
-                            ssl_dir=constants.IRONIC_CONF_DIR),
+                             ssl_dir=constants.IRONIC_CONF_DIR),
                          IronicContext(),
                          NginxContext(),
                          ObjectStoreContext(),
@@ -82,8 +81,8 @@ def register_configs():
     '''
     release = os_release('ironic-common')
     configs = templating.OSConfigRenderer(
-                                    templates_dir=constants.TEMPLATES_DIR,
-                                    openstack_release=release)
+        templates_dir=constants.TEMPLATES_DIR,
+        openstack_release=release)
 
     for cfg, d in resource_map().iteritems():
         configs.register(cfg, d['contexts'])
