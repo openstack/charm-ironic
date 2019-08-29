@@ -1,0 +1,8 @@
+Code-Review+2: James Page <james.page@canonical.com>
+Workflow+1: James Page <james.page@canonical.com>
+Verified+2: Zuul
+Submitted-by: Zuul
+Submitted-at: Thu, 29 Aug 2019 15:34:53 +0000
+Reviewed-on: https://review.opendev.org/678834
+Project: openstack/charm-ironic
+Branch: refs/heads/master
